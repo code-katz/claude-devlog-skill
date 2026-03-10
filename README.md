@@ -15,10 +15,13 @@ A custom Claude Code skill that maintains a structured development changelog (`D
 
 | Category | What It Captures |
 |---|---|
-| `architecture` | Technical design decisions, data model changes, stack choices |
-| `milestone` | Completed work, version releases, phase transitions |
-| `takeaway` | Key insights, lessons learned, important context |
-| `strategy` | Business decisions, market positioning, go-to-market pivots |
+| `feature` | New capability or user-facing functionality added to the project |
+| `bugfix` | A defect was identified and resolved |
+| `refactor` | Internal restructuring with no behavior change (code quality, naming, structure) |
+| `infrastructure` | Build system, CI/CD, deployment, tooling, or dependency changes |
+| `security` | Security hardening, vulnerability fixes, auth changes, secrets management |
+| `milestone` | Completed phase, release, or significant deliverable |
+| `strategy` | Business decisions, market positioning, go-to-market pivots (non-technical) |
 
 ## Installation
 
@@ -27,7 +30,7 @@ This skill is for [Claude Code](https://claude.ai/code) (the CLI). To install as
 ```bash
 mkdir -p ~/.claude/skills/devlog
 curl -o ~/.claude/skills/devlog/SKILL.md \
-  https://gitlab-master.nvidia.com/wcurran/devlog/-/raw/main/SKILL.md
+  https://raw.githubusercontent.com/d6veteran/devlog-skill/main/SKILL.md
 ```
 
 ## Usage
@@ -46,21 +49,37 @@ Authentication is handled via your system's git credential helper (e.g., macOS K
 Entries are reverse-chronological (newest first) and follow this structure:
 
 ```markdown
-## [2025-03-04] Brief descriptive title
+## [YYYY-MM-DD] Brief descriptive title
 
-**Category:** `architecture`
+**Category:** `feature` | `bugfix` | `refactor` | `infrastructure` | `security` | `milestone` | `strategy`
 **Tags:** `relevant`, `topic`, `tags`
+**Risk Level:** `low` | `med` | `high`
+**Breaking Change:** `yes` | `no`
 
 ### Summary
 A 1-2 sentence overview of what happened or was decided.
 
 ### Detail
-Full context including what was decided, why, what alternatives
-were considered, and implications for future work.
+Full context including what was decided, why, and implications for future work.
+
+### Decisions Made
+Explicit trade-off decisions — what options were evaluated, what was chosen,
+and why alternatives were rejected. Acts as a lightweight inline ADR.
 
 ### Related
 - Links to related entries or documents
 ```
+
+### Metadata Fields
+
+**Risk Level** describes the blast radius and reversibility of the change:
+- `low` — Isolated, easy to revert, no shared state affected
+- `med` — Touches shared code, multiple files, or has integration dependencies
+- `high` — Affects shared infrastructure, auth, data models, or production systems
+
+**Breaking Change** flags whether existing consumers must update:
+- `yes` — Public contract, API, CLI behavior, or file format changed
+- `no` — Backwards compatible
 
 ## Repository Contents
 
