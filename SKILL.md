@@ -139,8 +139,8 @@ If creating DEVLOG.md for the first time, use this header:
 ```markdown
 # [Project Name] — Development Log
 
-A living record of architectural decisions, milestones, key insights, and strategic direction.  
-Auto-maintained via Claude devlog skill. Entries are reverse-chronological.
+A living record of architectural decisions, milestones, key insights, and strategic direction.
+Auto-maintained via [claude-devlog-skill](https://github.com/d6veteran/claude-devlog-skill). Entries are reverse-chronological.
 
 ---
 ```
