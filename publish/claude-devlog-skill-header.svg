@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320">
+  <rect width="1280" height="320" fill="#141413"/>
+  <text x="640" y="155" text-anchor="middle" font-family="JetBrains Mono, Fira Code, Consolas, monospace" font-size="52" font-weight="600" fill="#6a9bcc">claude-devlog-skill</text>
+  <text x="640" y="205" text-anchor="middle" font-family="JetBrains Mono, Fira Code, Consolas, monospace" font-size="20" fill="#b0aea5">structured development changelogs for Claude</text>
+  <line x1="440" y1="240" x2="840" y2="240" stroke="#6a9bcc" stroke-width="2" stroke-opacity="0.4"/>
+</svg>
