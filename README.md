@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="publish/claude-devlog-skill-header.svg" alt="claude-devlog-skill" width="100%">
+</p>
+
 # claude-devlog-skill
 
 > Stop rebuilding context. Start every Claude session where the last one left off.
