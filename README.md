@@ -26,7 +26,7 @@ Developers working on long-running projects who are tired of losing context betw
 
 If you've ever watched Claude suggest an approach you already evaluated and rejected, propose an architecture you already have in place, or ask you to explain something you explained in a session three weeks ago — this is for you.
 
-Works especially well alongside [claude-dev-team](https://github.com/code-katz/claude-dev-team). When you're switching between specialists like Akira, Robin, and River across multiple sessions, the devlog ensures each new session inherits the full context of what the previous one decided.
+Works especially well alongside [claude-team-cli](https://github.com/code-katz/claude-team-cli). When you're switching between specialists like Akira, Robin, and River across multiple sessions, the devlog ensures each new session inherits the full context of what the previous one decided.
 
 ---
 
@@ -144,6 +144,18 @@ and why alternatives were rejected. Acts as a lightweight inline ADR.
 **Breaking Change** flags whether existing consumers must update:
 - `yes` — Public contract, API, CLI behavior, or file format changed
 - `no` — Backwards compatible
+
+---
+
+## Works Well With
+
+| Project | What it does |
+|---|---|
+| [claude-team-cli](https://github.com/code-katz/claude-team-cli) | Ten specialist personas for Claude Code — the devlog captures what each specialist decided across sessions |
+| [claude-roadmap-skill](https://github.com/code-katz/claude-roadmap-skill) | Living product roadmap with revision history — when a milestone ships and gets logged here, the roadmap updates to match |
+| [claude-plans-skill](https://github.com/code-katz/claude-plans-skill) | Archives finalized implementation plans — plans capture the "how before execution," the devlog captures "what was decided and why" |
+| [claude-todo-skill](https://github.com/code-katz/claude-todo-skill) | Lightweight task scratchpad — capture ideas mid-session without losing your train of thought |
+| [claude-publish-agent](https://github.com/code-katz/claude-publish-agent) | Publish markdown to blogging platforms — write about what you've built and ship it from the terminal |
 
 ---
 
