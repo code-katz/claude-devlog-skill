@@ -94,13 +94,13 @@ Each repo gets an SVG header banner (1280×320px) with:
 
 ```markdown
 <p align="center">
-  <img src="assets/header.svg" alt="project-name" width="100%">
+  <img src="publish/images/{project}-header.svg" alt="project-name" width="100%">
 </p>
 ```
 
 ### 4.3 File Location
 
-Store headers at `assets/header.svg` in each repo root.
+Store headers at `publish/images/{project}-header.svg` in each repo root.
 
 ---
 
