@@ -16,7 +16,7 @@ Auto-maintained via Claude devlog skill. Entries are reverse-chronological.
 Updated the DEVLOG.md header template in SKILL.md to include a hyperlink back to the `claude-devlog-skill` GitHub repo, providing attribution and discoverability on every project that uses the skill.
 
 ### Detail
-- Header template now includes: `Auto-maintained via [claude-devlog-skill](https://github.com/d6veteran/claude-devlog-skill)`
+- Header template now includes: `Auto-maintained via [claude-devlog-skill](https://github.com/code-katz/claude-devlog-skill)`
 - Applies to all new DEVLOG.md files created going forward — existing files are unchanged
 - Installed copy at `~/.claude/skills/devlog/SKILL.md` synced with repo
 
@@ -37,7 +37,7 @@ Updated the DEVLOG.md header template in SKILL.md to include a hyperlink back to
 Renamed the project from `devlog-skill` to `claude-devlog-skill` across GitHub, GitLab, README, and local git remotes to align with the `claude-` namespace convention used by sibling project `claude-dev-team`.
 
 ### Detail
-- GitHub repo renamed: `d6veteran/devlog-skill` → `d6veteran/claude-devlog-skill`
+- GitHub repo renamed: `code-katz/devlog-skill` → `code-katz/claude-devlog-skill`
 - GitLab repo renamed: `wcurran/devlog-skill` → `wcurran/claude-devlog-skill`
 - Local git remotes updated to new URLs
 - README install URL updated to reference new GitHub raw path
