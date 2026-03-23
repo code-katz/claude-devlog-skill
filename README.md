@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="publish/images/claude-devlog-skill-header.svg" alt="claude-devlog-skill" width="100%">
+  <img src="publish/images/Devlog_Dark_banner.png" alt="claude-devlog-skill" width="100%">
 </p>
 
 # claude-devlog-skill
