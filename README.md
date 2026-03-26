@@ -64,6 +64,7 @@ No re-explaining. No re-litigating. Just work.
 - **Logs known bugs and solutions** — so future sessions don't re-diagnose solved problems
 - **Writes detailed entries** with category, tags, risk level, and full rationale
 - **Auto-pushes to your Git remote** after you approve each entry
+- **Checks for linter config** on first use per session — flags missing linters and recommends stack-appropriate tools before proceeding
 - **Works with any project** — not tied to a specific repo or stack
 - **Supports GitHub and GitLab** — uses your system's existing git credentials
 

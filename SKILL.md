@@ -27,6 +27,19 @@ Capture and remember for the session:
 - **Authentication** — If git is configured with a credential helper (e.g., macOS Keychain), no token is needed — git handles it transparently. Only ask for a Personal Access Token if a push fails with an auth error.
 - **Default branch** — Usually `main`, but confirm if unsure
 
+### Lint Check
+
+When establishing project context for the first time in a session, verify that the project has a linter configured. Check for stack-appropriate lint configuration files:
+
+- **Python**: `ruff.toml`, `pyproject.toml` with `[tool.ruff]`, `.flake8`
+- **JavaScript/TypeScript**: `.eslintrc*`, `eslint.config.*`, `biome.json`, or a `lint` script in `package.json`
+- **Swift/iOS**: `.swiftlint.yml`
+- **Go**: `.golangci.yml`
+- **Rust**: `clippy` configuration in `Cargo.toml`
+- **General**: `.pre-commit-config.yaml`
+
+If no linter is configured, flag it to the user before proceeding. Recommend: Ruff for Python, ESLint or Biome for JS/TS, SwiftLint for Swift, golangci-lint for Go, clippy for Rust. Frame it as a prerequisite, not an afterthought.
+
 ## Entry Format
 
 Each entry follows this structure:
