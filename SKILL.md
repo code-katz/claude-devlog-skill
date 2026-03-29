@@ -46,6 +46,7 @@ Each entry follows this structure:
 
 ```markdown
 ## [YYYY-MM-DD] Brief descriptive title
+<!-- If superseded, a SUPERSEDED marker goes here (see Entry Deprecation) -->
 
 **Category:** `feature` | `bugfix` | `refactor` | `infrastructure` | `security` | `milestone` | `strategy`
 **Tags:** `relevant`, `topic`, `tags`
@@ -103,6 +104,35 @@ Whether this update changes a public contract, API, CLI behavior, or file format
 ### Decisions Made
 A dedicated section for recording explicit trade-off decisions: what options were evaluated, what was chosen, and why alternatives were rejected. Acts as a lightweight ADR (Architecture Decision Record) inline with the log entry. Populate this whenever an alternative approach was considered — even briefly — to prevent re-litigating settled decisions in future sessions.
 
+## Entry Deprecation
+
+As a project evolves, earlier devlog entries may contain decisions that were later reversed, superseded, or implemented differently. Without an explicit signal, Claude (and humans) may act on stale decisions buried deep in a growing DEVLOG.md. The deprecation mechanism solves this by marking outdated entries in-place.
+
+### Supersession Marker
+
+When an entry's decisions are no longer current, add a blockquote marker immediately after the entry heading, before the `**Category:**` line:
+
+```markdown
+## [2026-03-22] Original decision title
+> **SUPERSEDED [2026-03-26]:** Replaced by [2026-03-26] d20Mob ruleset adopted. Reason: custom ruleset replaces SRD 5e as mechanical foundation.
+
+**Category:** `strategy`
+...
+```
+
+### Marker Rules
+
+- **Format:** `> **SUPERSEDED [YYYY-MM-DD]:** Replaced by [date] replacement-entry-title. Reason: one-phrase explanation.`
+- **Placement:** Immediately after the `## [date] title` heading, before `**Category:**`.
+- **One marker per entry.** If an entry is superseded multiple times, update the existing marker to point to the latest replacement.
+- **Partial supersession:** When only some decisions in an entry are stale, use: `> **PARTIALLY SUPERSEDED [YYYY-MM-DD]:** [which decisions are stale and why]. [which decisions remain current].`
+- **Preserve the entry body.** The marker annotates; it does not rewrite history. The full original entry remains below the marker for historical reference.
+- **User approval required.** Never add a SUPERSEDED marker without showing it to the user first. Supersession is a judgment call, not an automation.
+
+### When Deprecation Happens
+
+Deprecation review is part of the entry-creation workflow (see Step 2 below). Every time a new entry is written, Claude scans existing entries for conflicts and proposes SUPERSEDED markers alongside the new entry. This is not a separate manual step.
+
 ## When to Create Entries
 
 ### Proactive Suggestions (Claude-initiated)
@@ -135,17 +165,30 @@ When this happens, capture what the user is referring to — which may be the im
 ### Step 1: Draft the Entry
 Write the entry following the format above. Include rich detail — the goal is that someone reading this months from now (including a future Claude session) can fully understand what happened and why.
 
-### Step 2: Show the User
-Present the drafted entry in the conversation and ask for confirmation or edits before committing. Never push without the user seeing the entry first.
+### Step 2: Review for Superseded Entries
+After drafting the new entry, scan the existing DEVLOG.md for decisions that the new entry conflicts with or replaces. This review is lightweight:
 
-### Step 3: Update DEVLOG.md
+1. Scan entry **headings** (`## [date] title`), **Summary** sections, and **Decisions Made** sections only. Skip Detail bodies unless a heading or summary suggests a conflict.
+2. For each conflict found, draft a SUPERSEDED or PARTIALLY SUPERSEDED marker (see Entry Deprecation above).
+3. If no conflicts are found, proceed to Step 3 with no deprecations.
+
+This scan is proportional to the number of entries, not the total line count. For a 15-entry DEVLOG, scanning headings + summaries + decisions is approximately 30-40 lines of reading.
+
+### Step 3: Show the User
+Present the drafted entry in the conversation. If Step 2 identified superseded entries, also present the proposed SUPERSEDED markers:
+
+> "New entry ready. I also noticed that [2026-03-22] Original decision is superseded by this new entry — I'd like to add a SUPERSEDED marker to it. Here's the new entry and the proposed deprecation:"
+
+Ask for confirmation or edits before committing. Never push without the user seeing the entry and any proposed deprecations first.
+
+### Step 4: Update DEVLOG.md
 **IMPORTANT: DEVLOG.md always lives inside the project repo root — never in a parent directory.**
 
 Determine the correct path:
 - **Local Claude Code session** (most common): The primary working directory IS the repo root. Use `{cwd}/DEVLOG.md` directly — e.g., if cwd is `/Users/alice/projects/my-app`, write to `/Users/alice/projects/my-app/DEVLOG.md`.
 - **Remote/cloned session**: Use the cloned repo path (e.g., `/home/claude/[repo-name]/DEVLOG.md`).
 
-Read the existing DEVLOG.md from that path (or create it if it doesn't exist). Insert the new entry at the top of the file, below the header. Entries are reverse-chronological (newest first).
+Read the existing DEVLOG.md from that path (or create it if it doesn't exist). Insert the new entry at the top of the file, below the header. Entries are reverse-chronological (newest first). If the user approved any SUPERSEDED markers in Step 3, insert those markers into the affected entries as well.
 
 If creating DEVLOG.md for the first time, use this header:
 
@@ -160,23 +203,76 @@ Auto-maintained via [claude-devlog-skill](https://github.com/code-katz/claude-de
 
 Replace `[Project Name]` with the actual project name established during session setup (e.g., "The Chronicle", "My API Service").
 
-### Step 4: Commit and Push
+### Step 5: Archive if Needed
+After updating DEVLOG.md, check whether archiving is warranted. Archiving moves superseded entries to a separate file to keep the active DEVLOG focused and within a manageable context window. See the **Archiving** section below for trigger conditions, file format, and rules.
+
+### Step 6: Commit and Push
 After the user approves:
 
 ```bash
 cd /path/to/repo
 git add DEVLOG.md
+# If archiving occurred, also add DEVLOG-ARCHIVE.md
+git add DEVLOG-ARCHIVE.md 2>/dev/null
 git commit -m "devlog: [brief title from entry]"
 git push origin main
 ```
 
-Use a commit message prefixed with `devlog:` followed by a short version of the entry title.
+Use a commit message prefixed with `devlog:` followed by a short version of the entry title. If archiving occurred in Step 5, use: `devlog: [brief title] + archive N superseded entries`.
 
 ### Error Handling
 - **Git not configured:** Prompt the user to provide their repo URL and set up authentication. Walk them through creating a Personal Access Token if needed.
 - **Push fails:** Show the error, suggest common fixes (auth issues, branch protection, network). Offer to save the entry locally so it's not lost.
 - **DEVLOG.md has merge conflicts:** Show the conflict, help resolve it, then retry.
 - **No repo cloned locally:** Clone the repo first, then proceed.
+
+## Archiving
+
+As a project matures, superseded entries accumulate in DEVLOG.md. Archiving moves them to a separate file so the active devlog stays focused on current decisions and fits comfortably within Claude's context window.
+
+### When to Archive
+
+Archiving triggers during Step 5 of the workflow when **both** conditions are true:
+
+1. DEVLOG.md exceeds approximately **50 entries** or **1,500 lines** (whichever comes first)
+2. There are entries with **SUPERSEDED** markers available to archive
+
+If either condition is not met, skip archiving. Small devlogs and devlogs with no superseded entries are never archived.
+
+### What Gets Archived
+
+Only entries with a `SUPERSEDED` or `PARTIALLY SUPERSEDED` marker. Current entries are **never** archived regardless of age. A 3-month-old architectural decision that is still in effect is more valuable in the active devlog than a 1-week-old decision that was reversed.
+
+For `PARTIALLY SUPERSEDED` entries: do **not** archive. These entries still contain current decisions alongside stale ones. They remain in DEVLOG.md with their partial marker intact.
+
+### Archive File Format
+
+The archive file is `DEVLOG-ARCHIVE.md` in the same repo root as DEVLOG.md.
+
+```markdown
+# [Project Name] — Development Log Archive
+
+Superseded entries moved from DEVLOG.md. Each entry's SUPERSEDED marker points to its replacement in the active devlog.
+Auto-maintained via [claude-devlog-skill](https://github.com/code-katz/claude-devlog-skill). Entries are reverse-chronological.
+
+---
+
+## [2026-03-22] Original decision title
+> **SUPERSEDED [2026-03-26]:** Replaced by [2026-03-26] d20Mob ruleset adopted. Reason: custom ruleset replaces SRD 5e.
+
+**Category:** `strategy`
+...full original entry preserved...
+
+---
+```
+
+### No Tombstones
+
+When an entry is moved to the archive, it is **removed entirely** from DEVLOG.md. No stub or placeholder is left behind. The superseding entry already exists in DEVLOG.md and provides the current context. If someone needs the historical record, `DEVLOG-ARCHIVE.md` is in the same directory.
+
+### Archive Commit
+
+If archiving occurs, stage both files and use the commit message format: `devlog: archive N superseded entries`.
 
 ## Git Setup (First-Time Per Session)
 
@@ -227,6 +323,10 @@ To locate the devlog:
 2. If the project is listed in MEMORY.md with a devlog path, use that path
 3. If no DEVLOG.md exists yet, proceed normally — nothing to read
 
+**Handling superseded entries:** When encountering a `SUPERSEDED` marker while reading, note the supersession and **skip the entry body**. Do not act on decisions from superseded entries. Follow the pointer to the replacement entry instead. Superseded entries exist in the file only until the next archiving pass moves them to `DEVLOG-ARCHIVE.md`.
+
+**Do NOT read `DEVLOG-ARCHIVE.md` at session start.** It contains only historical entries that have been explicitly replaced. Loading it wastes context budget on stale decisions.
+
 You do not need to summarize the devlog to the user unless they ask. Just read it silently and let it inform your work.
 
 ### On demand (reactive)
@@ -238,6 +338,16 @@ When the user asks about past decisions, progress, or project history:
 3. Summarize relevant entries in the conversation
 
 This makes the devlog a two-way resource — not just for writing, but for recalling context.
+
+### Historical research
+
+When the user asks about the evolution of a decision ("why did we change X?", "what was the original approach?", "how did we get here?"):
+
+1. Read `DEVLOG-ARCHIVE.md` from the repo root (if it exists)
+2. Find the superseded entry and its replacement in the active DEVLOG.md
+3. Present the evolution: original decision -> supersession reason -> current decision
+
+The archive is a research tool for understanding how the project arrived at its current state. It is not loaded proactively.
 
 ## Multiple Entries Per Session
 
