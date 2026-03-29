@@ -5,6 +5,39 @@ Auto-maintained via Claude devlog skill. Entries are reverse-chronological.
 
 ---
 
+## [2026-03-29] Added entry deprecation markers and DEVLOG-ARCHIVE.md archiving
+
+**Category:** `feature`
+**Tags:** `deprecation`, `archiving`, `superseded`, `context-management`, `skill-behavior`
+**Risk Level:** `med`
+**Breaking Change:** `yes`
+
+### Summary
+Added SUPERSEDED/PARTIALLY SUPERSEDED markers for stale devlog entries, automatic deprecation review during entry creation, threshold-based archiving to DEVLOG-ARCHIVE.md, and updated reading instructions that skip superseded entries at session start.
+
+### Detail
+- New "Entry Deprecation" section: defines `> **SUPERSEDED [date]:**` blockquote marker format, placement rules, partial supersession, user-approval requirement
+- Updated workflow from 4 steps to 6: added Step 2 (Review for Superseded Entries) and Step 5 (Archive if Needed)
+- Step 2 is a lightweight scan: headings + Summary + Decisions Made sections only, not full Detail bodies
+- New "Archiving" section: triggers when DEVLOG.md exceeds ~50 entries or ~1,500 lines AND superseded entries exist. Only SUPERSEDED entries are archived. PARTIALLY SUPERSEDED entries stay. No tombstones.
+- Archive file is `DEVLOG-ARCHIVE.md` (neutral name, alphabetically adjacent)
+- Updated "Reading the Devlog": skip superseded entry bodies at session start, do NOT load DEVLOG-ARCHIVE.md proactively
+- New "Historical research" subsection: read archive when user asks about decision evolution
+- SKILL.md grew from 259 to 368 lines (+109)
+
+### Decisions Made
+- **Inline markers + archiving (both):** Inline markers alone solve decision clarity but not context window pressure. Archiving alone loses the signal for entries not yet archived. Both are needed.
+- **DEVLOG-ARCHIVE.md over DEPRECATED-DEVLOG.md:** "Archive" is neutral; "deprecated" has negative connotations. The file contains valid historical context, just superseded.
+- **No tombstones:** Removing archived entries entirely keeps DEVLOG.md lean. The superseding entry already exists in the active file.
+- **Threshold-based archiving (50 entries or 1,500 lines):** Based on current data (d20Mob DEVLOG hit 702 lines in one week). Conservative enough to avoid premature archiving on small projects.
+- **Only SUPERSEDED entries get archived, never by age alone:** A 3-month-old architectural decision still in effect is more valuable than a 1-week-old reversed decision.
+
+### Related
+- Plan: `code-katz/claude-devlog-skill/plans/2026-03-28-devlog-deprecation-archiving.md`
+- Companion change: claude-plans-skill status markers (same session)
+
+---
+
 ## [2026-03-26] Added lint check requirement to SKILL.md
 
 **Category:** `feature`
